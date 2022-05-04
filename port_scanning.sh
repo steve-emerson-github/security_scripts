@@ -1,35 +1,40 @@
 #!/bin/bash
+# Author: 
+# Date: 04-05-2022
+# Description:
+
+# Color variables 
+
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+NOCOLOR="\033[0m"
+
+
 if [ $# -eq 0 ] 
   then
-       echo "No arguments: Please provide an IP address"
+       echo "${GREEN}No arguments: Please provide an IP address${NOCOLOR}"
        exit
-  fi
+fi
 
 ip=$1
 date=$(date +%h%YT%H%M)
 
 mkdir -p ~/reconnaissance/nmap/$date 2> /dev/null
 
-echo "Search using provided IP address: $ip"
+echo "${GREEN}Search using provided IP address: $ip${NOCOLOR}"
 echo ""
-echo "Results will be output to: " ~/reconnaissance/nmap/$date/
+echo "${GREEN}Results will be output to: ${NOCOLOR}" ~/reconnaissance/nmap/$date/
 echo ""
 echo "Select an option:"
-echo "1 = sudo nmap -sC -A -oA nmap $ip"
-echo "2 = sudo nmap -p- $ip"
-echo "3 = sudo nmap --script smb-vuln* -p 445 -A $ip"
+echo "${GREEN}1 =${NOCOLOR} sudo nmap -sC -A -oA nmap $ip"
+echo "${GREEN}2 =${NOCOLOR} sudo nmap -p- $ip"
+echo "${GREEN}3 =${NOCOLOR} sudo nmap --script smb-vuln* -p 445 -A $ip"
 echo ""
-read -p "Options (e.g. 1, 3) >" input
+read -p "${GREEN}Options${NOCOLOR} (e.g. 1, 3) >" input
 
-for option in $input
-do
-  if [[ "$option" == "1" ]]; then
-   sudo nmap -sC -A -oA ~/reconnaissance/nmap/$date/nmap-Option1 $ip
-  fi
-  if [[ "$option" == "2" ]]; then
-   sudo nmap -p- -oA ~/reconnaissance/nmap/$date/nmap-Option2 $ip
-  fi
-  if [[ "$option" == "3" ]]; then
-   sudo nmap --script smb-vuln* -p 445 -A -oA ~/reconnaissance/nmap/$date/nmap-Option3 $ip
-  fi
-done
+case "$input" in 
+  1) sudo nmap -sC -A -oA ~/reconnaissance/nmap/$date/nmap-Option1 $ip ;;
+  2) sudo nmap -p- -oA ~/reconnaissance/nmap/$date/nmap-Option2 $ip ;;
+  3) sudo nmap --script smb-vuln* -p 445 -A -oA ~/reconnaissance/nmap/$date/nmap-Option3 $ip ;;
+  *) exit 
+esac
